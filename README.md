@@ -1,6 +1,6 @@
 # Lapiz
 
-Simple system information tool on Tk!
+Simple system information tool on GTK3!
 
 ## Features
 
