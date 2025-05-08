@@ -1,11 +1,12 @@
 # Lapiz
 
-Simple system information tool on GTK3!
+Simple system information tool on GTK3 👣!
 
 ## Features
 
-- Shows all info
-- Works on any distro
+    📖 Shows info about your OS, disks, RAM, CPU and others.
+
+    🖥🐧 Works on any distro.
 
 ## Installation
 
