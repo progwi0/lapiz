@@ -6,7 +6,7 @@ Simple system information tool on GTK3 👣!
 
     📖 Shows info about your OS, disks, RAM, CPU and others.
 
-    🖥🐧 Works on any distro.
+    🐧 Works on any distro.
 
 ## Installation
 
