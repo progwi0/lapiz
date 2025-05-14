@@ -1,82 +1,98 @@
-from tkinter import messagebox as dialogus
-from ttkbootstrap import *
-from ttkbootstrap.constants import *
+import gi
+gi.require_version("Gtk", "3.0")
+gi.require_version("GdkPixbuf", "2.0")
+from gi.repository import Gtk, GdkPixbuf
 import os
-import webbrowser
 import platform
 import cpuinfo
 import psutil
 import socket
+import webbrowser
 
-app = Window(themename="litera")
-app.title("Lapiz")
+lapiz = Gtk.Window(title = "Lapiz")
+lapiz.set_default_size(480, 240)
+lapiz.set_icon_from_file("/usr/share/icons/lapiz.png")
+ui = Gtk.ScrolledWindow()
 
-homus = os.path.expanduser("~")
-patus = os.path.join(homus, ".progwi0")
-themepath = os.path.join(patus, "theme.txt")
+header = Gtk.HeaderBar()
 
-simplus = "~/.progwi0/theme.txt"
+lapizpc = Gtk.Button()
+lapizpc.connect("clicked", lambda lapizpencil:menu.popup(None, None, None, None, 0, Gtk.get_current_event_time()))
+lapizpc.set_hexpand(True)
 
-if not os.path.exists(simplus):
-    os.system("cd ~ && mkdir .progwi0 && cd .progwi0 && touch theme.txt")
+closus = Gtk.Button()
+closus.connect("clicked", Gtk.main_quit)
 
-def info():
-    dialogus.showinfo("✏️", "Lapiz 4.0\nCreated in 2025 by progwi0.")
+header.pack_start(lapizpc)
+header.pack_end(closus)
 
-def light():
-    app.style.theme_use("litera")
-    with open(themepath, "w") as file:
-        file.write("litera")
+lapizimg = Gtk.Image.new_from_icon_name("emoji-symbols-symbolic", Gtk.IconSize.BUTTON)
+lapizpc.set_image(lapizimg)
 
-def dark():
-    app.style.theme_use("darkly")
-    with open(themepath, "w") as file:
-        file.write("darkly")    
+closusimg = Gtk.Image.new_from_icon_name("window-close-symbolic", Gtk.IconSize.BUTTON)
+closus.set_image(closusimg)
 
-lapiz = Button(app, text = "✏️", command = lambda:menu.post(app.winfo_pointerx(), app.winfo_pointery()), bootstyle = SECONDARY)
-lapiz.pack(fill = "x")
+header.set_custom_title(lapizpc)
+lapiz.set_titlebar(header)
 
-menu = Menu(app, tearoff = 0)
+boxus = Gtk.Box()
 
-menu.add_separator()
-menu.add_command(label="Light theme", command = light)
-menu.add_command(label="Dark theme", command = dark)
-menu.add_separator()
-menu.add_command(label="Update (Only for pix version)", command = lambda:os.system("pix reinstall lapiz"))
-menu.add_separator()
-menu.add_command(label="My site", command = lambda:webbrowser.open("https://progwi0.github.io/"))
-menu.add_command(label="About", command = info)
-menu.add_separator()
+boxus.set_halign(Gtk.Align.CENTER)
+boxus.set_valign(Gtk.Align.CENTER)
 
-os = Label(app, text = f"OS: {platform.system()} {platform.release()}")
-os.pack(pady="10", padx="30")
+def distro():
+    with open("/etc/os-release") as f:
+            lines = f.readlines()
+            for line in lines:
+                if line.startswith("PRETTY_NAME="):
+                    return line.strip().split("=")[1].strip('"')
 
-arch = Label(app, text = f"Architecture: {platform.machine()}")
-arch.pack(pady="10", padx="30")
+info = Gtk.Label(label = f"OS: {distro()}\nArchitecture: {platform.machine()}\nCPU: {cpuinfo.get_cpu_info()['brand_raw']}\nCPU Cores: {psutil.cpu_count(logical = False)}\nCPU Threads: {psutil.cpu_count(logical = True)}\nRAM: {round(psutil.virtual_memory().total / (1024 ** 3))}gb\nDisk used: {round(psutil.disk_usage('/').total / (1024 ** 3), 2)}gb\nDisk total: {round(psutil.disk_usage('/').used / (1024 ** 3), 2)}\nIP-address: {socket.gethostbyname(socket.gethostname())}")
 
-cpu = Label(app, text = f"CPU: {cpuinfo.get_cpu_info()['brand_raw']}")
-cpu.pack(pady="10", padx="30")
+info.set_justify(Gtk.Justification.CENTER)
+info.set_xalign(0.5)
 
-cores = Label(app, text = f"Cores: {psutil.cpu_count(logical = False)}")
-cores.pack(pady="10", padx="30")
+boxus.add(info)
 
-threads = Label(app, text = f"Threads: {psutil.cpu_count(logical = True)}")
-threads.pack(pady="10", padx="30")
+ui.add(boxus)
 
-ram = Label(app, text = f"RAM: {round(psutil.virtual_memory().total / (1024 ** 3))}gb")
-ram.pack(pady="10", padx="30")
+menu = Gtk.Menu()
 
-disktotal = Label(app, text = f"Disk Total: {round(psutil.disk_usage('/').total / (1024 ** 3), 2)}gb")
-disktotal.pack(pady="10", padx="30")
+newwindow = Gtk.MenuItem(label = "New window")
+newwindow.connect("activate", lambda newwindow:os.system("kreka"))
+menu.append(newwindow)
 
-diskused = Label(app, text = f"Disk Used: {round(psutil.disk_usage('/').used / (1024 ** 3), 2)}gb")
-diskused.pack(pady="10", padx="30")
+mysite = Gtk.MenuItem(label = "My site")
+mysite.connect("activate", lambda mysite:webbrowser.open("https://progwi0.github.io/"))
+menu.append(mysite)
 
-ip = Label(app, text = f"IP-address: {socket.gethostbyname(socket.gethostname())}")
-ip.pack(pady="10", padx="30")
+def about(widget):
+    dialogus = Gtk.AboutDialog()
+    
+    dialogus.set_program_name("Lapiz")
+    dialogus.set_version("8.0")
+    dialogus.set_copyright("© 2025 progwi0")
+    dialogus.set_comments("Simple system information tool on GTK3!")
+    
+    iconus = GdkPixbuf.Pixbuf.new_from_file_at_size("/usr/share/icons/lapiz.png", 64, 64)
+    dialogus.set_logo(iconus)
+    
+    dialogus.set_website("https://progwi0.github.io/")
+    dialogus.set_authors(["progwi0", "chicken banana", "sigma"])
+    
+    dialogus.set_license_type(Gtk.License.GPL_3_0)
+    
+    dialogus.run()
+    dialogus.destroy()
 
-with open(themepath, "r") as file:
-        themus = file.read().strip()
-        app.style.theme_use(themus)
+abouts = Gtk.MenuItem(label = "About Lapiz")
+abouts.connect("activate", about)
+menu.append(abouts)
 
-app.mainloop()
+menu.show_all()
+
+lapiz.add(ui)
+lapiz.connect("destroy", Gtk.main_quit)
+lapiz.show_all()
+
+Gtk.main()
