@@ -2,7 +2,7 @@
 
 Lapiz - simple system information tool on GTK3 👣!
 
-![Lapiz on KDE Plasma 6.3](./screenshots/Screenshot_20250522_153933.png)
+![Lapiz on KDE Plasma 6.3](./screenshots/Screenshot_20250522_153933-1.png)
 
 ## Features
 
