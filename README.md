@@ -1,14 +1,15 @@
 # Lapiz
 
-Simple system information tool on GTK3 👣!
+Lapiz - simple system information tool on GTK3 👣!
+
+![Lapiz on KDE Plasma 6.3](./screenshots/Screenshot_20250522_153933.png)
 
 ## Features
 
-    📖 Shows info about your OS, disks, RAM, CPU and others.
+- 📖 Shows info about your OS, disks, RAM, CPU and others.
 
-    🐧 Works on any distro.
+- 🐧 Works on any distro.
 
 ## Installation
 
-You can install Lapiz via [Pix](https://github.com/progwi0/pix)!
-(or you can download Lapiz in releases.)
+You can download Lapiz from [releases](https://github.com/progwi0/lapiz/releases) or via [Pix](https://github.com/progwi0/pix).
