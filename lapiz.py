@@ -11,13 +11,13 @@ import webbrowser
 
 lapiz = Gtk.Window(title = "Lapiz")
 lapiz.set_default_size(480, 240)
-lapiz.set_icon_from_file("/usr/share/icons/lapiz.png")
+
 ui = Gtk.ScrolledWindow()
 
 header = Gtk.HeaderBar()
 
-lapizpc = Gtk.Button()
-lapizpc.connect("clicked", lambda lapizpencil:menu.popup(None, None, None, None, 0, Gtk.get_current_event_time()))
+lapizpc = Gtk.MenuButton()
+lapizpc.connect("clicked", lambda lapizpencil:exp.show_all())
 lapizpc.set_hexpand(True)
 
 closus = Gtk.Button()
@@ -56,26 +56,20 @@ boxus.add(info)
 
 ui.add(boxus)
 
-menu = Gtk.Menu()
-
-newwindow = Gtk.MenuItem(label = "New window")
-newwindow.connect("activate", lambda newwindow:os.system("kreka"))
-menu.append(newwindow)
-
-mysite = Gtk.MenuItem(label = "My site")
-mysite.connect("activate", lambda mysite:webbrowser.open("https://progwi0.github.io/"))
-menu.append(mysite)
+def distroid():
+    with open("/etc/os-release") as f:
+            lines = f.readlines()
+            for line in lines:
+                if line.startswith("ID="):
+                    return line.strip().split("=")[1].strip('"')
 
 def about(widget):
     dialogus = Gtk.AboutDialog()
     
     dialogus.set_program_name("Lapiz")
-    dialogus.set_version("8.0")
+    dialogus.set_version("10.0")
     dialogus.set_copyright("© 2025 progwi0")
-    dialogus.set_comments("Simple system information tool on GTK3!")
-    
-    iconus = GdkPixbuf.Pixbuf.new_from_file_at_size("/usr/share/icons/lapiz.png", 64, 64)
-    dialogus.set_logo(iconus)
+    dialogus.set_comments(f"Simple system information tool on GTK3! (running on {distroid()})")
     
     dialogus.set_website("https://progwi0.github.io/")
     dialogus.set_authors(["progwi0", "chicken banana", "sigma"])
@@ -85,14 +79,26 @@ def about(widget):
     dialogus.run()
     dialogus.destroy()
 
-abouts = Gtk.MenuItem(label = "About Lapiz")
-abouts.connect("activate", about)
-menu.append(abouts)
+exp = Gtk.Popover()
 
-menu.show_all()
+menus = Gtk.Box(spacing=1, orientation=Gtk.Orientation.VERTICAL)
+
+newwindows = Gtk.Button(label = "New window")
+newwindows.connect("clicked", lambda newwindow:os.system("lapiz"))
+menus.pack_start(newwindows, True, True, 0)
+
+mysite = Gtk.Button(label = "My site")
+mysite.connect("clicked", lambda mysite:webbrowser.open("https://progwi0.github.io/"))
+menus.pack_start(mysite, True, True, 0)
+
+abouts = Gtk.Button(label = "About Lapiz")
+abouts.connect("clicked", about)
+menus.pack_start(abouts, True, True, 0)
+
+exp.add(menus)
+
+lapizpc.set_popover(exp)
 
 lapiz.add(ui)
 lapiz.connect("destroy", Gtk.main_quit)
 lapiz.show_all()
-
-Gtk.main()
