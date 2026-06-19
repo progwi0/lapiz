@@ -2,6 +2,9 @@
 
 ### DEB-PACKAGES ISN'T SUPPORTED ANYMORE!
 
+> [!IMPORTANT]
+> The development of this project is FOR NOW frozen, I will unfreeze it soon.
+
 Lapiz - simple system information tool on GTK3 👣!
 
 ![Lapiz on KDE Plasma 6.3](./screenshots/Screenshot_20250522_153933-2.png)
